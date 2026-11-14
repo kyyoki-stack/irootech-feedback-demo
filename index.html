@@ -67,14 +67,13 @@ main{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;oversc
 #text{width:100%;border:0;outline:0;resize:none;min-height:70px;font-size:16px;line-height:1.6;background:transparent;display:block}
 #text::placeholder{color:#a9abb2}
 .tip{font-size:12px;color:var(--sub);margin-top:4px}
-.qks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.qk{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px;font-weight:600;position:relative;overflow:hidden;padding:2px 0}
-#recBtn{overflow:visible}
+.qks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;padding-top:6px}
+.qk{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px;font-weight:600;position:relative;overflow:visible;padding:2px 0}
 .qk .ic{width:58px;height:58px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 6px 14px rgba(30,35,50,.06);display:flex;align-items:center;justify-content:center;transition:.15s}
 .qk svg{width:27px;height:27px;stroke:var(--ink);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .qk small{font-size:11px;color:var(--sub);font-weight:400;margin-top:-5px}
 .qk:active .ic{transform:scale(.94)}
-.qk input{position:absolute;inset:0;opacity:0;font-size:100px;cursor:pointer}
+.qk input{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;cursor:pointer;overflow:hidden}
 .qk.rec .ic{background:var(--bad);border-color:var(--bad);animation:pulse 1.2s infinite}
 .qk.rec svg{stroke:#fff}.qk.rec{color:var(--bad)}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(214,56,61,.45)}100%{box-shadow:0 0 0 14px rgba(214,56,61,0)}}
