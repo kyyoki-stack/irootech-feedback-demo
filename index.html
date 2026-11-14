@@ -535,8 +535,8 @@ function paintDone(it) {
         ? `<p class="tip" style="margin-top:10px">想更快被处理，可以补一句文字说明。</p><div class="row2"><button class="btn ghost" id="aiNo">补一句</button><button class="btn dark" id="aiYes">不用了</button></div>`
         : `<div class="row2"><button class="btn ghost" id="aiNo">不对，我来改</button><button class="btn dark" id="aiYes">对</button></div>`}</div>
     </div>
-    <div class="row2" style="margin-top:14px"><button class="btn ghost" id="again">再提一条</button><button class="btn ghost" id="toList">看我的问题</button></div>`;
-  const fin = t => { $('#aiAct').innerHTML = `<p class="tip" style="margin-top:10px;color:var(--ok)">✓ ${t}</p>`; };
+    <div class="row2" id="doneNext" style="margin-top:14px" hidden><button class="btn ghost" id="again">再提一条</button><button class="btn ghost" id="toList">看我的问题</button></div>`;
+  const fin = t => { $('#aiAct').innerHTML = `<p class="tip" style="margin-top:10px;color:var(--ok)">✓ ${t}</p>`; $('#doneNext').hidden = false; };
   $('#aiYes').onclick = async () => { try { await api(`/api/feedback/${it.id}/understanding`, { uid }); } catch {} fin('已确认'); };
   $('#aiNo').onclick = () => {
     $('#aiAct').innerHTML = `<textarea class="edit" id="aiEdit" placeholder="用你自己的话说一遍">${ai.needHuman ? '' : esc(ai.summary)}</textarea><button class="btn dark" id="aiSave" style="margin-top:10px">保存</button>`;
