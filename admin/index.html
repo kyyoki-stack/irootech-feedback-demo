@@ -165,6 +165,49 @@ button.kpi:hover{border-color:var(--line)}
 .login p{margin:0 0 18px;color:var(--sub);font-size:13px}
 .login form{margin:0}
 .login input{width:100%;border:1px solid var(--line);background:var(--faint);border-radius:12px;padding:12px;font-size:15px;outline-color:var(--brand);text-align:center}
+.ins-head{display:flex;gap:16px;align-items:flex-start;background:linear-gradient(120deg,#e7f6ee 0%,#f3faf1 60%,#fff 100%);border:1px solid #d5ecdf;border-radius:20px;padding:18px 20px;margin-bottom:18px}
+.ins-ic{flex:none;width:44px;height:44px;border-radius:14px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 18px rgba(46,158,114,.25)}
+.ins-head h2{margin:0 0 4px;font-size:18px}
+.ins-head p{margin:0;color:#3f5a4c;line-height:1.7}
+.ins-head .meta2{font-size:12px;color:var(--sub);margin-top:8px}
+.ins-go{flex:none;margin-left:auto;background:var(--grad);color:#fff;border-radius:12px;padding:10px 18px;font-weight:700;box-shadow:0 8px 18px rgba(46,158,114,.22);white-space:nowrap}
+.ins-go:disabled{opacity:.7}
+.ins-go .spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;margin-right:6px;vertical-align:-1px;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.sec{display:flex;align-items:baseline;gap:10px;margin:4px 2px 10px}
+.sec h3{margin:0;font-size:16px}.sec span{font-size:12px;color:var(--sub)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin-bottom:24px}
+.pc{background:var(--card);border-radius:20px;padding:16px 18px 14px;box-shadow:0 6px 20px rgba(30,35,50,.05);display:flex;flex-direction:column;gap:10px;border:1.5px solid transparent;animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pc.focus{border-color:#f3d2d3}
+.pc .hd{display:flex;align-items:center;gap:8px}
+.pc .rk{width:24px;height:24px;border-radius:8px;background:var(--ink);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.vd{font-size:12px;font-weight:700;border-radius:8px;padding:2px 9px}
+.vd.focus{background:var(--bad-soft);color:var(--bad)}.vd.watch{background:var(--warn-soft);color:var(--warn)}.vd.skip{background:var(--grey-soft);color:#5d5f66}
+.pc .hs{margin-left:auto;font-size:12px;color:var(--sub)}.pc .hs b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+.pc h4{margin:0;font-size:17px;line-height:1.4}
+.nums{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--sub)}
+.nums b{color:var(--ink);font-size:15px;margin-right:2px;font-variant-numeric:tabular-nums}
+.tagz{display:flex;flex-wrap:wrap;gap:6px}
+.tg{font-size:12px;font-weight:600;border-radius:7px;padding:1px 8px;background:var(--grey-soft);color:#4d4f57}
+.tg.t-安全,.tg.t-有停线{background:var(--bad-soft);color:var(--bad)}.tg.t-卡交付{background:var(--warn-soft);color:var(--warn)}.tg.t-影响效率{background:var(--blue-soft);color:var(--blue)}
+.quote{background:var(--faint);border-radius:12px;padding:9px 12px;font-size:13px;color:#4d4f57;line-height:1.6}
+.quote small{display:block;color:var(--mute);margin-top:2px}
+.ai-l{font-size:13px;line-height:1.6}.ai-l span{color:var(--sub);margin-right:6px}
+.pc .ft{display:flex;gap:8px;margin-top:2px}
+.pc .ft button{flex:1}
+.wl{background:var(--card);border-radius:18px;box-shadow:0 6px 18px rgba(30,35,50,.04);overflow:hidden}
+.wr{display:grid;grid-template-columns:86px minmax(0,1fr) 150px 110px;gap:14px;align-items:center;padding:12px 18px;border-top:1px solid var(--line);width:100%;text-align:left}
+.wr:first-child{border-top:0}.wr:hover{background:#fafbfc}
+.wr .t b{display:block;font-weight:600}.wr .t small{color:var(--sub);font-size:12px}
+.idbar{display:flex;align-items:center;gap:10px;background:var(--brand-soft);color:var(--brand-ink);border-radius:12px;padding:8px 14px;margin-bottom:12px;font-weight:600}
+.idbar button{margin-left:auto;font-weight:600;text-decoration:underline}
+.mg{position:fixed;inset:0;z-index:40;background:rgba(20,22,28,.35);display:flex;align-items:center;justify-content:center}
+.mg .box{background:#fff;border-radius:20px;padding:22px;width:min(460px,92vw)}
+.mg h3{margin:0 0 6px}.mg p{margin:0 0 12px;color:var(--sub);font-size:13px;line-height:1.6}
+.mg input,.mg textarea{width:100%;border:1px solid var(--line);background:var(--faint);border-radius:10px;padding:9px 10px;outline-color:var(--brand)}
+.mg textarea{min-height:70px;resize:vertical;margin-top:8px}
+.mg .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(34,35,42,.94);color:#fff;padding:10px 18px;border-radius:12px;z-index:50;font-size:14px}
 @media (max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}.row{grid-template-columns:80px minmax(0,1fr) 110px}.row>:nth-child(4),.row>:nth-child(5),.row>:nth-child(6){display:none}.top{flex-wrap:wrap}.search{width:100%;margin-left:0}}
 </style>
@@ -173,12 +216,14 @@ button.kpi:hover{border-color:var(--line)}
 <header class="top">
   <svg class="logo" viewBox="0 0 258 40" role="img" aria-label="iROOTECH"><g fill="none" stroke="#111" stroke-width="7"><path d="M3.5 14V40"/><path d="M16.5 40V3.5H33a8.75 8.75 0 0 1 0 17.5H16.5M29 21L40.5 40"/><rect x="49.5" y="3.5" width="27" height="33" rx="8"/><rect x="87.5" y="3.5" width="27" height="33" rx="8"/><path d="M122 3.5H152M137 3.5V40"/><path d="M158 3.5H186M158 36.5H186"/><path d="M220 3.5H203.5a8 8 0 0 0-8 8V28.5a8 8 0 0 0 8 8H220"/><path d="M229.5 0V40M252.5 0V40M229.5 20H252.5"/></g><path d="M0 0H7V7H0Z" fill="#17a34a"/><path d="M161 16.5H183V23.5H161Z" fill="#17a34a"/></svg>
   <span class="ttl">无人叉车需求池</span>
-  <nav class="tabs"><button data-v="pool" class="on">需求池</button><button data-v="board">看板</button><button data-v="stats">统计</button></nav>
+  <nav class="tabs"><button data-v="ins" class="on">✨ AI 痛点</button><button data-v="pool">需求池</button><button data-v="board">看板</button><button data-v="stats">统计</button></nav>
   <div class="r"><span id="upd"></span><button class="ghost" id="refresh">刷新</button><button class="ghost" id="logout">退出</button></div>
 </header>
 
 <main>
-  <section class="view on" id="v-pool">
+  <section class="view on" id="v-ins"></section>
+  <section class="view" id="v-pool">
+    <div class="idbar" id="idbar" hidden></div>
     <div class="kpis" id="kpis"></div>
     <div class="filters">
       <div class="seg" id="seg"></div>
@@ -228,6 +273,7 @@ const GROUPS = [
 ];
 const PCOL = { P0: 'var(--p0)', P1: 'var(--p1)', P2: 'var(--p2)', P3: 'var(--p3)' };
 let token = localStorage.getItem('fp_admin_token') || '';
+let idFilter = null, insight = null, insBusy = false;
 let items = [], group = 'todo', openId = null, picked = null;
 
 function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2400); }
@@ -277,7 +323,7 @@ async function load() {
   const cats = [...new Set(items.map(i => i.ai?.category).filter(Boolean))];
   const keep = $('#fCat').value;
   $('#fCat').innerHTML = '<option value="">全部类别</option>' + cats.map(c => `<option${c === keep ? ' selected' : ''}>${esc(c)}</option>`).join('');
-  render();
+  insight = null; render();
   if (openId) openDetail(openId, true);
 }
 $('#refresh').onclick = load;
@@ -301,9 +347,11 @@ function render() {
   $('#kpis').innerHTML = kpiHTML(); $('#kpis2').innerHTML = kpiHTML();
   $('#seg').innerHTML = GROUPS.map(([k, t, f]) => `<button data-g="${k}" class="${k === group ? 'on' : ''}">${t}<i>${items.filter(i => f(i.status) && (!i.mergedInto || k === 'all' || k === 'done')).length}</i></button>`).join('');
   const f = GROUPS.find(g => g[0] === group)[2], cat = $('#fCat').value, pp = $('#fP').value, q = $('#q').value.trim().toLowerCase();
-  let list = items.filter(i => f(i.status) && (!i.mergedInto || group === 'all' || group === 'done') && (!cat || i.ai?.category === cat) && (!pp || i.prio.p === pp)
+  $('#idbar').hidden = !idFilter;
+  if (idFilter) $('#idbar').innerHTML = `正在看痛点「${esc(idFilter.title)}」的 ${idFilter.ids.length} 条反馈<button id="idClear">看全部</button>`;
+  let list = idFilter ? items.filter(i => idFilter.ids.includes(i.id)) : items.filter(i => f(i.status) && (!i.mergedInto || group === 'all' || group === 'done') && (!cat || i.ai?.category === cat) && (!pp || i.prio.p === pp)
     && (!q || [i.ai?.summary, i.text, i.site, i.role, '#' + i.id].join(' ').toLowerCase().includes(q)));
-  list.sort(group === 'todo' ? (a, b) => b.prio.score - a.prio.score || b.id - a.id : (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  list.sort(group === 'todo' || idFilter ? (a, b) => b.prio.score - a.prio.score || b.id - a.id : (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
   $('#list').innerHTML = `<div class="row head"><span>AI 优先级</span><span>问题</span><span>状态</span><span>类别 / 模块</span><span>提过的人</span><span>更新</span></div>`
     + (list.length ? list.map(i => `<button class="row${i.id === openId ? ' sel' : ''}" data-id="${i.id}">
       <span>${pHTML(i)}</span>
@@ -314,7 +362,7 @@ function render() {
       <span class="ppl">${i.prio.people} 人${i.children.length ? `<small>含合并 ${i.children.length} 条</small>` : ''}</span>
       <span class="sc">${ago(i.updatedAt)}</span></button>`).join('')
       : `<div class="empty">${group === 'todo' ? '没有待处理的问题 🎉' : '没有符合条件的问题'}</div>`);
-  renderBoard(); renderStats();
+  renderBoard(); renderStats(); renderIns();
 }
 $('#seg').onclick = e => { const b = e.target.closest('button'); if (b) { group = b.dataset.g; render(); } };
 ['fCat', 'fP'].forEach(id => $('#' + id).onchange = render);
@@ -322,10 +370,83 @@ $('#q').oninput = render;
 document.addEventListener('click', e => {
   const k = e.target.closest('.kpi'); if (k) {
     const g = { todo: 'todo', doing: 'doing', confirm: 'doing', week: 'all', p0: 'todo' }[k.dataset.k];
-    group = g; $('#fP').value = k.dataset.k === 'p0' ? 'P0' : ''; switchView('pool'); render(); return;
+    group = g; idFilter = null; $('#fP').value = k.dataset.k === 'p0' ? 'P0' : ''; switchView('pool'); render(); return;
   }
   const r = e.target.closest('[data-id]'); if (r) openDetail(+r.dataset.id);
 });
+
+/* ---------- AI 痛点 ---------- */
+const VD = { focus: '重点解决', watch: '先观察', skip: '暂不做' };
+const LV_E = { stop: '😫', heavy: '😣', some: '😐', minor: '🙂', idea: '🤩' };
+function runInsight(animate) {
+  if (!animate) { insight = Pool.insights(items); return renderIns(); }
+  insBusy = true; renderIns();
+  setTimeout(() => { insight = Pool.insights(items); insBusy = false; renderIns(); }, 1100);
+}
+function cardHTML(c, n) {
+  const lv = Object.entries(c.levels).filter(([, v]) => v).map(([k, v]) => `${LV_E[k]} ${v}`).join('　');
+  const canMerge = c.ids.filter(id => { const i = items.find(x => x.id === id); return i && !i.mergedInto && Pool.OPEN.includes(i.status); }).length > 1
+    || (c.count > 1 && Pool.OPEN.includes((items.find(x => x.id === c.topId) || {}).status));
+  const doing = c.ids.map(id => items.find(x => x.id === id)).find(i => i && !i.mergedInto && Pool.DOING.includes(i.status));
+  const doingTag = doing ? `<span class="tg" style="background:var(--ok-soft);color:var(--ok)">已排期${doing.version ? ' ' + esc(doing.version) : ''} · ${ST[doing.status][0]}</span>` : '';
+  return `<div class="pc ${c.verdict}" style="animation-delay:${n * 60}ms">
+    <div class="hd"><span class="rk">${n + 1}</span><span class="vd ${c.verdict}">${VD[c.verdict]}</span><span class="hs">痛点分 <b>${c.score}</b></span></div>
+    <h4>${esc(c.title)}</h4>
+    <div class="nums"><span><b>${c.count}</b>条反馈</span><span><b>${c.people}</b>人</span><span><b>${c.sites || '-'}</b>个现场</span><span>近 7 天 <b>+${c.fresh}</b></span>${lv ? `<span>${lv}</span>` : ''}</div>
+    ${c.tags.length || doingTag ? `<div class="tagz">${doingTag}${c.tags.map(t => `<span class="tg t-${t}">${t}</span>`).join('')}</div>` : ''}
+    <div class="quote">“${esc(c.quote)}”<small>— ${esc(c.quoteFrom || '提交人')}</small></div>
+    <div class="ai-l"><span>AI 判断</span>${esc(c.why)}</div>
+    <div class="ai-l"><span>建议</span>${esc(c.fix)}</div>
+    <div class="ft"><button class="ghost" data-see="${c.key}">查看这 ${c.count} 条</button>${c.verdict !== 'skip' && canMerge ? `<button class="ghost" data-take="${c.key}" style="border-color:var(--brand);color:var(--brand-ink)">合并成一个需求并接受</button>` : ''}</div>
+  </div>`;
+}
+function renderIns() {
+  if (!insight && items.length) insight = Pool.insights(items);
+  const I = insight || { cards: [], summary: '还没有数据。', total: 0 };
+  const focus = I.cards.filter(c => c.verdict === 'focus'), other = I.cards.filter(c => c.verdict !== 'focus');
+  $('#v-ins').innerHTML = `
+    <div class="ins-head"><div class="ins-ic">✨</div><div style="flex:1">
+      <h2>本周 AI 痛点汇总</h2><p>${insBusy ? 'AI 正在阅读所有未关闭的反馈，归纳痛点…' : esc(I.summary)}</p>
+      <div class="meta2">${insBusy ? '' : `汇总于 ${fmt(I.at || new Date())} · 读了 ${I.total} 条未关闭反馈 · 规则版 AI（关键词 + 相似度），接入大模型后归纳会更准`}</div></div>
+      <button class="ins-go" id="insGo" ${insBusy ? 'disabled' : ''}>${insBusy ? '<i class="spin"></i>汇总中' : '重新汇总'}</button></div>
+    ${insBusy ? '' : `
+    <div class="sec"><h3>这周重点看这 ${focus.length} 个</h3><span>按影响排序：安全 > 卡交付 > 停线 > 多人多现场反复出现</span></div>
+    ${focus.length ? `<div class="cards">${focus.map(cardHTML).join('')}</div>` : '<div class="empty">暂时没有必须马上解决的痛点 🎉</div>'}
+    ${other.length ? `<div class="sec"><h3>先观察 / 暂不做（${other.length}）</h3><span>再有人提或变严重时，会自动升到上面</span></div>
+    <div class="wl">${other.map(c => `<button class="wr" data-see="${c.key}"><span class="vd ${c.verdict}">${VD[c.verdict]}</span>
+      <span class="t"><b>${esc(c.title)}</b><small>${esc(c.why)}</small></span><span class="sc">${c.count} 条 · ${c.people} 人 · ${c.sites || '-'} 个现场</span><span class="sc">痛点分 ${c.score}</span></button>`).join('')}</div>` : ''}`}`;
+  if ($('#insGo')) $('#insGo').onclick = () => runInsight(true);
+}
+document.addEventListener('click', e => {
+  const see = e.target.closest('[data-see]');
+  if (see) { const c = insight.cards.find(x => x.key === see.dataset.see); idFilter = { title: c.title, ids: c.ids }; switchView('pool'); render(); window.scrollTo(0, 0); return; }
+  if (e.target.id === 'idClear') { idFilter = null; render(); return; }
+  const take = e.target.closest('[data-take]');
+  if (take) takeTheme(insight.cards.find(x => x.key === take.dataset.take));
+});
+// 把一个痛点里的反馈合并成一个需求，并接受排期：所有提过的人都会收到进度
+function takeTheme(c) {
+  const main = items.find(i => i.id === c.topId);
+  const rest = c.ids.map(id => items.find(i => i.id === id)).filter(i => i && i.id !== main.id && !i.mergedInto && Pool.OPEN.includes(i.status));
+  const m = document.createElement('div'); m.className = 'mg';
+  m.innerHTML = `<div class="box"><h3>合并成一个需求</h3>
+    <p>以 #${main.id}「${esc((main.ai?.summary || main.text).slice(0, 30))}」为主需求，把另外 ${rest.length} 条合并进来，然后接受排期。${c.people} 个提过的人都会在手机上看到进度。</p>
+    <input id="tkVer" placeholder="计划在哪个版本解决，比如 V1.4">
+    <textarea id="tkRep"></textarea>
+    <div class="row2"><button class="ghost" id="tkNo">取消</button><button class="go" id="tkGo" style="margin:0">确认</button></div></div>`;
+  document.body.appendChild(m);
+  const draft = () => `已接受：「${c.title.split(/[：，]/)[0]}」是 ${c.people} 个人都遇到的问题，合并成一个需求，计划在 ${$('#tkVer').value.trim() || '下个版本'} 解决。${c.fix ? '处理思路：' + c.fix + '。' : ''}`;
+  $('#tkRep').value = draft(); $('#tkVer').oninput = () => $('#tkRep').value = draft(); $('#tkVer').focus();
+  $('#tkNo').onclick = () => m.remove();
+  $('#tkGo').onclick = async () => {
+    $('#tkGo').disabled = true; $('#tkGo').textContent = '处理中…';
+    try {
+      for (const r of rest) await api('/api/admin/feedback/' + r.id, { method: 'POST', body: JSON.stringify({ action: 'merge', mergeInto: main.id }) });
+      if (Pool.OPEN.includes(main.status)) await api('/api/admin/feedback/' + main.id, { method: 'POST', body: JSON.stringify({ action: 'accept', version: $('#tkVer').value, reply: $('#tkRep').value }) });
+      m.remove(); toast(`已合并 ${rest.length} 条并接受，${c.people} 个人都会收到进度`); await load(); runInsight(false);
+    } catch (e) { toast(e.message); $('#tkGo').disabled = false; $('#tkGo').textContent = '确认'; }
+  };
+}
 
 /* ---------- 看板 ---------- */
 function renderBoard() {
@@ -368,7 +489,7 @@ function renderStats() {
 
 /* ---------- 切换视图 ---------- */
 function switchView(v) { document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v)); document.querySelectorAll('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v)); }
-$('.tabs').onclick = e => { const b = e.target.closest('button'); if (b) switchView(b.dataset.v); };
+$('.tabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.v === 'pool' && idFilter) { idFilter = null; render(); } switchView(b.dataset.v); };
 
 /* ---------- 详情 + 处理 ---------- */
 function actionsFor(it) {
