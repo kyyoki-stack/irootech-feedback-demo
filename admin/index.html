@@ -163,6 +163,7 @@ button.kpi:hover{border-color:var(--line)}
 .login .box{background:#fff;border-radius:22px;padding:30px 28px;width:min(380px,92vw);box-shadow:0 20px 50px rgba(30,35,50,.08);text-align:center}
 .login h2{margin:14px 0 4px;font-size:20px}
 .login p{margin:0 0 18px;color:var(--sub);font-size:13px}
+.login form{margin:0}
 .login input{width:100%;border:1px solid var(--line);background:var(--faint);border-radius:12px;padding:12px;font-size:15px;outline-color:var(--brand);text-align:center}
 .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(34,35,42,.94);color:#fff;padding:10px 18px;border-radius:12px;z-index:50;font-size:14px}
 @media (max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}.row{grid-template-columns:80px minmax(0,1fr) 110px}.row>:nth-child(4),.row>:nth-child(5),.row>:nth-child(6){display:none}.top{flex-wrap:wrap}.search{width:100%;margin-left:0}}
@@ -199,8 +200,11 @@ button.kpi:hover{border-color:var(--line)}
     <svg viewBox="0 0 258 40" style="height:20px"><use href="#"/></svg>
     <h2>产品经理登录</h2>
     <p>输入管理口令进入需求池</p>
-    <input id="tokIn" type="password" placeholder="管理口令" autocomplete="current-password">
-    <button class="go" id="tokGo">进入</button>
+    <form id="tokForm" autocomplete="off">
+      <input id="tokIn" type="text" placeholder="粘贴管理口令" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <button class="go" id="tokGo" type="submit">进入</button>
+    </form>
+    <p id="tokErr" style="color:var(--bad);margin:12px 0 0;min-height:20px"></p>
   </div>
 </div>
 
@@ -248,13 +252,21 @@ const pHTML = it => `<span class="pb"><span class="p ${it.prio.p}">${it.prio.p}<
 const attHTML = it => { const n = k => it.media.filter(m => m.kind === k).length; return [n('image') && `📷${n('image')}`, n('video') && `🎬${n('video')}`, n('audio') && `🎙${n('audio')}`].filter(Boolean).join(' '); };
 
 /* ---------- 登录 ---------- */
-function showLogin() { $('#login').hidden = false; setTimeout(() => $('#tokIn').focus(), 50); }
-$('#tokGo').onclick = async () => {
-  token = $('#tokIn').value.trim(); if (!token) return;
+function showLogin() {
+  $('#login').hidden = false; setTimeout(() => $('#tokIn').focus(), 50);
+  if (!/^https?:$/.test(location.protocol)) { $('#tokErr').textContent = '这个页面是直接用文件打开的，登录不了。请用网址打开，比如 http://localhost:8799/admin'; $('#tokGo').disabled = true; }
+}
+$('#tokForm').onsubmit = async e => {
+  e.preventDefault(); $('#tokErr').textContent = '';
+  const t = $('#tokIn').value.trim(); if (!t) { $('#tokErr').textContent = '先粘贴口令'; return; }
+  token = t; $('#tokGo').disabled = true; $('#tokGo').textContent = '正在进入…';
   try { await api('/api/admin/check'); localStorage.setItem('fp_admin_token', token); $('#login').hidden = true; load(); }
-  catch (e) { toast(e.message === '请先登录' ? '口令不对' : e.message); }
+  catch (err) { $('#tokErr').textContent = err.message === '请先登录' ? '口令不对，请检查一下' : err.message; }
+  $('#tokGo').disabled = false; $('#tokGo').textContent = '进入';
 };
-$('#tokIn').onkeydown = e => e.key === 'Enter' && $('#tokGo').click();
+// 链接里带口令（…/admin?token=xxx）时直接登录，并把口令从地址栏去掉
+(() => { const q = new URLSearchParams(location.search), t = q.get('token');
+  if (t) { token = t; localStorage.setItem('fp_admin_token', t); history.replaceState(null, '', location.pathname); } })();
 $('#logout').onclick = () => { localStorage.removeItem('fp_admin_token'); token = ''; showLogin(); };
 $('#login svg').outerHTML = $('.top svg.logo').outerHTML.replace('class="logo"', 'style="height:20px;width:auto"');
 
