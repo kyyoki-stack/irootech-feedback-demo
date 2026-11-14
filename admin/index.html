@@ -193,7 +193,8 @@ button.kpi:hover{border-color:var(--line)}
 .ins-head{display:flex;gap:16px;align-items:flex-start;background:linear-gradient(120deg,#e7f6ee 0%,#f3faf1 60%,#fff 100%);border:1px solid #d5ecdf;border-radius:20px;padding:18px 20px;margin-bottom:18px}
 .ins-ic{flex:none;width:44px;height:44px;border-radius:14px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 18px rgba(46,158,114,.25)}
 .ins-head h2{margin:0 0 4px;font-size:18px}
-.ins-head p{margin:0;color:#3f5a4c;line-height:1.7}
+.ins-head p{margin:0;color:#3f5a4c;line-height:1.7;font-size:15px}
+.ins-head p b{font-size:20px;color:var(--brand-ink);margin:0 2px;font-variant-numeric:tabular-nums}
 .ins-head .meta2{font-size:12px;color:var(--sub);margin-top:8px}
 .ins-go{flex:none;margin-left:auto;background:var(--grad);color:#fff;border-radius:12px;padding:10px 18px;font-weight:700;box-shadow:0 8px 18px rgba(46,158,114,.22);white-space:nowrap}
 .ins-go:disabled{opacity:.7}
@@ -308,6 +309,7 @@ button.kpi:hover{border-color:var(--line)}
   .media{grid-template-columns:repeat(2,1fr)}
   .mg .box{padding:18px}
 }
+@media (max-width:640px){.ins-head p{font-size:14px}.ins-head p b{font-size:17px}}
 </style>
 </head>
 <body>
@@ -504,13 +506,13 @@ function renderIns() {
   const focus = I.cards.filter(c => c.verdict === 'focus'), other = I.cards.filter(c => c.verdict !== 'focus');
   $('#v-ins').innerHTML = `
     <div class="ins-head"><div class="ins-ic">✨</div><div style="flex:1">
-      <h2>本周 AI 痛点汇总</h2><p>${insBusy ? 'AI 正在阅读所有未关闭的反馈，归纳痛点…' : esc(I.summary)}</p>
-      <div class="meta2">${insBusy ? '' : `汇总于 ${fmt(I.at || new Date())} · 读了 ${I.total} 条未关闭反馈 · 规则版 AI（关键词 + 相似度），接入大模型后归纳会更准`}</div></div>
+      <h2>本周 AI 痛点汇总</h2><p>${insBusy ? 'AI 正在归纳…' : `<b>${I.total}</b> 条反馈 → <b>${I.cards.length}</b> 个痛点 · 重点 <b>${focus.length}</b> 个`}</p>
+      <div class="meta2">${insBusy ? '' : `${fmt(I.at || new Date())} 汇总 · 规则版 AI`}</div></div>
       <button class="ins-go" id="insGo" ${insBusy ? 'disabled' : ''}>${insBusy ? '<i class="spin"></i>汇总中' : '重新汇总'}</button></div>
     ${insBusy ? '' : `
-    <div class="sec"><h3>这周重点看这 ${focus.length} 个</h3><span>按影响排序：安全 > 卡交付 > 停线 > 多人多现场反复出现</span></div>
+    <div class="sec"><h3>本周重点 ${focus.length} 个</h3><span>安全 > 卡交付 > 停线 > 多人反复</span></div>
     ${focus.length ? `<div class="cards">${focus.map(cardHTML).join('')}</div>` : '<div class="empty">暂时没有必须马上解决的痛点 🎉</div>'}
-    ${other.length ? `<div class="sec"><h3>先观察 / 暂不做（${other.length}）</h3><span>再有人提或变严重时，会自动升到上面</span></div>
+    ${other.length ? `<div class="sec"><h3>先观察 / 暂不做（${other.length}）</h3><span>变严重会自动升级</span></div>
     <div class="wl">${other.map(c => `<button class="wr" data-see="${c.key}"><span class="vd ${c.verdict}">${VD[c.verdict]}</span>
       <span class="t"><b>${esc(c.title)}</b><small>${esc(c.why)}</small></span><span class="sc">${c.count} 条 · ${c.people} 人 · ${c.sites || '-'} 个现场</span><span class="sc">痛点分 ${c.score}</span></button>`).join('')}</div>` : ''}`}`;
   if ($('#insGo')) $('#insGo').onclick = () => runInsight(true);
