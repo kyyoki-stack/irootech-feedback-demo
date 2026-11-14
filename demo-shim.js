@@ -52,6 +52,27 @@
     S(700, 'd-j', '生产制造', '长沙总装', 'some', '下线测试时充电口对不准，要人工推一下');
     S(120, 'd-k', '现场运维', '长沙 18 号厂房', 'heavy', '两台车在窄通道会车时互相等，谁也不走，堵了 10 分钟');
     S(25, 'd-l', '客户', '长沙 18 号厂房', 'stop', '车在坡道上溜车了一小段，差点碰到人，太危险');
+    // 前一两周已经处理过的问题：让数据看板的周期、流转、重开率有数
+    const H = 60, D = 1440;
+    const done = (min, uid, role, site, lv, text, steps) => {
+      const it = S(min, uid, role, site, lv, text);
+      for (const [st, after, note, by] of steps) { push(it, st, note || '', by || 'pm', ago(min - after)); if (by !== 'user' && note) it.reply = note; }
+      if (it.history.some(h => h.status === 'accepted')) it.version = 'V1.2';
+      return it;
+    };
+    done(13 * D, 'd-m', '现场运维', '长沙 18 号厂房', 'heavy', '叉车倒车时蜂鸣器声音太小，车间里听不见', [
+      ['reviewing', 3 * H, '已看到'], ['accepted', 6 * H, '加大倒车提示音，加闪灯，排进 V1.2'], ['dev', D], ['test', 4 * D], ['released', 6 * D, '已在 V1.2 上线'], ['solved', 7 * D, '提交人确认：已解决', 'user']]);
+    done(12 * D, 'd-n', '客户', '株洲 3 号仓', 'some', '任务完成后平板上没有提示，不知道车干完没有', [
+      ['reviewing', 5 * H, '已看到'], ['accepted', D, '任务完成加声音和弹窗提示'], ['dev', 2 * D], ['released', 5 * D, '已在 V1.2 上线'], ['solved', 6 * D, '提交人确认：已解决', 'user']]);
+    done(11 * D, 'd-o', '调试实施', '昆山 2 号厂', 'heavy', '托盘有破损时识别失败，车一直在原地重试', [
+      ['reviewing', 2 * H, '已看到'], ['accepted', 8 * H, '识别失败超过 3 次就报警请人处理，不再原地重试'], ['dev', D], ['released', 4 * D, '已在 V1.2 上线'],
+      ['reopened', 5 * D, '提交人反馈：还没解决。破损严重的还是会卡住', 'user'], ['dev', 6 * D, '继续优化破损托盘识别']]);
+    done(10 * D, 'd-p', '售后', '长沙 18 号厂房', 'minor', '充电时屏幕一直亮着，晚上很晃眼', [
+      ['reviewing', 9 * H, '已看到'], ['answered', 10 * H, '设置里可以打开"充电时熄屏"，已发操作截图给现场']]);
+    done(9 * D, 'd-q', '销售', '', 'idea', '希望叉车外壳能换成客户的品牌颜色', [
+      ['reviewing', D, '已看到'], ['rejected', D + 2 * H, '这次先不做：定制外壳会拉长交付周期、增加成本，和今年标准化交付的目标冲突']]);
+    done(8 * D, 'd-r', '现场运维', '株洲 3 号仓', 'some', '夜班时车灯太暗，监控里看不清车的位置', [
+      ['reviewing', 4 * H, '已看到'], ['accepted', 9 * H, '加亮行车灯，排进 V1.3'], ['dev', 3 * D, '研发已开始修改']]);
     push(b, 'reviewing', '已看到，和定位组一起看日志', 'pm', ago(1400));
     push(i, 'deferred', '先暂缓：今年先保证单现场交付，WMS 对接放到明年产品化里统一做', 'pm', ago(5000)); i.reply = '先暂缓：今年先保证单现场交付，WMS 对接放到明年产品化里统一做';
   }

@@ -90,6 +90,31 @@ button.kpi:hover{border-color:var(--line)}
 .kc .meta{margin:0}
 
 /* 统计 */
+.dash-m{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:12px}
+.m{background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 6px 18px rgba(30,35,50,.04)}
+.m span{display:block;font-size:12px;color:var(--sub)}
+.m b{display:block;font-size:24px;font-weight:800;line-height:1.3;font-variant-numeric:tabular-nums}
+.m b small{font-size:13px;font-weight:600;color:var(--sub);margin-left:2px}
+.m em{font-style:normal;font-size:12px;color:var(--sub)}
+.m em.up{color:var(--bad)}.m em.down{color:var(--ok)}
+.dash{display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:12px}
+.cols{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:6px;border-bottom:1px solid var(--line)}
+.cols .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
+.cols .c i{display:block;width:100%;max-width:26px;background:var(--brand);border-radius:4px 4px 0 0;min-height:0}
+.cols .c:hover i{background:var(--brand-ink)}
+.cols .c b{font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px;font-variant-numeric:tabular-nums}
+.xl{display:flex;gap:6px;margin-top:6px}.xl span{flex:1;text-align:center;font-size:11px;color:var(--mute)}
+.fun{display:flex;flex-direction:column;gap:8px}
+.fr{display:grid;grid-template-columns:88px 1fr 70px;align-items:center;gap:10px;font-size:13px}
+.fr .tr{height:22px;background:var(--faint);border-radius:6px;overflow:hidden}
+.fr .tr i{display:block;height:100%;background:var(--brand);border-radius:6px}
+.fr .v{text-align:right;font-variant-numeric:tabular-nums}.fr .v b{font-weight:700}.fr .v small{color:var(--sub);margin-left:4px}
+.heat{width:100%;border-collapse:separate;border-spacing:3px;font-size:12px}
+.heat th{font-weight:500;color:var(--sub);text-align:center;padding:2px 0}
+.heat th.r{text-align:left;color:#4d4f57;font-weight:600;white-space:nowrap;padding-right:6px}
+.heat td{height:30px;border-radius:6px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--sub);margin-top:10px}
+@media (max-width:1100px){.dash-m{grid-template-columns:repeat(3,1fr)}.dash{grid-template-columns:1fr}}
 .charts{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
 .chart{background:var(--card);border-radius:18px;padding:16px 18px;box-shadow:0 6px 18px rgba(30,35,50,.04)}
 .chart h3{margin:0 0 2px;font-size:14px}
@@ -235,7 +260,7 @@ button.kpi:hover{border-color:var(--line)}
     <div class="list" id="list"></div>
   </section>
   <section class="view" id="v-board"><div class="board" id="board"></div></section>
-  <section class="view" id="v-stats"><div class="kpis" id="kpis2"></div><div class="charts" id="charts"></div></section>
+  <section class="view" id="v-stats"><div class="dash-m" id="dashM"></div><div class="dash" id="dash"></div><div class="charts" id="charts"></div></section>
 </main>
 
 <div class="mask" id="mask" hidden></div>
@@ -345,7 +370,7 @@ function kpiHTML() {
 
 /* ---------- 需求池列表 ---------- */
 function render() {
-  $('#kpis').innerHTML = kpiHTML(); $('#kpis2').innerHTML = kpiHTML();
+  $('#kpis').innerHTML = kpiHTML();
   $('#seg').innerHTML = GROUPS.map(([k, t, f]) => `<button data-g="${k}" class="${k === group ? 'on' : ''}">${t}<i>${items.filter(i => f(i.status) && (!i.mergedInto || k === 'all' || k === 'done')).length}</i></button>`).join('');
   const f = GROUPS.find(g => g[0] === group)[2], cat = $('#fCat').value, pp = $('#fP').value, q = $('#q').value.trim().toLowerCase();
   $('#idbar').hidden = !idFilter;
@@ -475,16 +500,60 @@ function bars(title, sub, rows) {
     : '<p>暂无数据</p>'}</div>`;
 }
 function count(list, key) { const m = {}; list.forEach(i => { const k = key(i) || '未填'; m[k] = (m[k] || 0) + 1; }); return Object.entries(m).sort((a, b) => b[1] - a[1]); }
+const DAY = 86400000;
+const firstPm = i => i.history.find(h => h.by === 'pm' || h.by === 'auto');
+function dur(ms) { if (ms == null || isNaN(ms)) return '—'; const h = ms / 3600000; return h < 1 ? Math.max(1, Math.round(h * 60)) + '<small>分钟</small>' : h < 48 ? (Math.round(h * 10) / 10) + '<small>小时</small>' : (Math.round(h / 24 * 10) / 10) + '<small>天</small>'; }
+const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+const HEAT = ['#f5f6f8', '#d3ece0', '#a3d6bb', '#5fb68a', '#2e9e72', '#1d7550'];
 function renderStats() {
+  const now = Date.now(), wk = now - 7 * DAY, pwk = now - 14 * DAY;
+  const thisW = items.filter(i => new Date(i.createdAt) > wk).length, lastW = items.filter(i => { const t = new Date(i.createdAt); return t > pwk && t <= wk; }).length;
+  const resp = items.map(i => { const f = firstPm(i); return f ? new Date(f.t) - new Date(i.createdAt) : null; }).filter(x => x != null && x >= 0);
+  const solved = items.filter(i => i.status === 'solved');
+  const cycle = solved.map(i => new Date((i.history.filter(h => h.status === 'solved').pop() || {}).t) - new Date(i.createdAt)).filter(x => x >= 0);
+  const decided = items.filter(i => !Pool.OPEN.includes(i.status)).length;
+  const released = items.filter(i => i.history.some(h => h.status === 'released'));
+  const reopened = items.filter(i => i.history.some(h => h.status === 'reopened'));
+  const backlogOld = items.filter(i => Pool.OPEN.includes(i.status) && !i.mergedInto && now - new Date(i.createdAt) > 3 * DAY).length;
+  const diff = thisW - lastW;
+  $('#dashM').innerHTML = [
+    ['本周新提交', thisW + '<small>条</small>', `<em class="${diff > 0 ? 'up' : diff < 0 ? 'down' : ''}">较上周 ${diff > 0 ? '+' : ''}${diff}</em>`],
+    ['平均首次响应', dur(avg(resp)), '<em>提交 → 产品经理第一次处理</em>'],
+    ['平均解决周期', dur(avg(cycle)), `<em>提交 → 提交人确认解决（${solved.length} 条）</em>`],
+    ['已给结论', items.length ? Math.round(decided / items.length * 100) + '<small>%</small>' : '—', `<em>${decided} / ${items.length} 条不再待处理</em>`],
+    ['上线后被说没解决', released.length ? Math.round(reopened.length / released.length * 100) + '<small>%</small>' : '—', `<em>${reopened.length} / ${released.length} 条上线的</em>`],
+    ['积压超过 3 天', backlogOld + '<small>条</small>', `<em class="${backlogOld ? 'up' : 'down'}">${backlogOld ? '待处理里等太久的' : '没有积压'}</em>`],
+  ].map(([t, v, e]) => `<div class="m"><span>${t}</span><b>${v}</b>${e}</div>`).join('');
+
+  // 近 14 天每天新提交
+  const days = [...Array(14)].map((_, k) => { const d = new Date(now - (13 - k) * DAY); d.setHours(0, 0, 0, 0); return d; });
+  const perDay = days.map(d => items.filter(i => { const t = new Date(i.createdAt); return t >= d && t < new Date(+d + DAY); }).length);
+  const maxD = Math.max(1, ...perDay);
+  // 流转：每条反馈走到了哪一步（含已经走过的）
+  const reached = st => items.filter(i => i.history.some(h => st.includes(h.status)) || st.includes(i.status)).length;
+  const steps = [['提交', items.length], ['已评审', reached(['reviewing', 'accepted', 'merged', 'deferred', 'rejected', 'answered', 'need_info'])], ['已接受', reached(['accepted'])], ['已上线', reached(['released'])], ['确认解决', reached(['solved'])]];
+  // 现场 × 严重程度（未关闭）
+  const live = items.filter(i => !i.mergedInto && !Pool.CLOSED.includes(i.status));
+  const lvs = ['stop', 'heavy', 'some', 'minor', 'idea'];
+  const sites = count(live, i => (i.site || '').replace(/\s+/g, '') || '未填现场').slice(0, 6).map(r => r[0]);
+  const cell = (s, l) => live.filter(i => ((i.site || '').replace(/\s+/g, '') || '未填现场') === s && i.level === l).length;
+  const maxC = Math.max(1, ...sites.flatMap(s => lvs.map(l => cell(s, l))));
+  $('#dash').innerHTML = `
+    <div class="chart"><h3>每天新提交</h3><p>近 14 天，看问题有没有在变多</p>
+      <div class="cols">${perDay.map((v, k) => `<div class="c" title="${days[k].getMonth() + 1}月${days[k].getDate()}日：${v} 条">${v ? `<b>${v}</b>` : ''}<i style="height:${v / maxD * 100}%"></i></div>`).join('')}</div>
+      <div class="xl">${days.map((d, k) => `<span>${k % 2 === 0 || k === 13 ? (d.getMonth() + 1) + '/' + d.getDate() : ''}</span>`).join('')}</div></div>
+    <div class="chart"><h3>处理流转</h3><p>反馈走到每一步的数量，看卡在哪一环</p>
+      <div class="fun">${steps.map(([t, v]) => `<div class="fr" title="${t}：${v} 条"><span>${t}</span><span class="tr"><i style="width:${items.length ? v / items.length * 100 : 0}%"></i></span><span class="v"><b>${v}</b><small>${items.length ? Math.round(v / items.length * 100) : 0}%</small></span></div>`).join('')}</div>
+      <p class="note">${steps[1][1] < steps[0][1] ? `还有 ${steps[0][1] - steps[1][1]} 条没评审过；` : ''}${steps[3][1] > steps[4][1] ? `${steps[3][1] - steps[4][1]} 条上线后还没等到提交人确认。` : ''}</p></div>
+    <div class="chart" style="grid-column:1/-1"><h3>哪个现场、多严重</h3><p>未关闭的问题，颜色越深越多。看哪个现场在"停线""很影响"上扎堆</p>
+      ${sites.length ? `<table class="heat"><tr><th></th>${lvs.map(l => `<th>${lvOf(l)}</th>`).join('')}<th>合计</th></tr>
+      ${sites.map(st => `<tr><th class="r">${esc(st)}</th>${lvs.map(l => { const v = cell(st, l), k = v ? Math.min(5, Math.ceil(v / maxC * 5)) : 0; return `<td title="${esc(st)} · ${lvOf(l)}：${v} 条" style="background:${HEAT[k]};color:${k >= 4 ? '#fff' : 'var(--ink)'}">${v || ''}</td>`; }).join('')}<td style="color:var(--sub)">${lvs.reduce((n, l) => n + cell(st, l), 0)}</td></tr>`).join('')}</table>` : '<p>暂无数据</p>'}</div>`;
+
   const open = items.filter(i => !i.mergedInto && !Pool.CLOSED.includes(i.status));
-  const order = ['stop', 'heavy', 'some', 'minor', 'idea', ''];
   $('#charts').innerHTML = [
-    bars('按问题类别', '所有未关闭的问题（不含已合并）', count(open, i => i.ai?.category)),
+    bars('按问题类别', '未关闭的问题', count(open, i => i.ai?.category)),
     bars('按模块', '问题集中在哪个模块', count(open, i => i.ai?.module)),
-    bars('按现场', '哪个现场问题最多', count(open, i => (i.site || '').replace(/\s+/g, '')).slice(0, 8)),
     bars('按提交人角色', '谁在提问题（全部）', count(items, i => i.role)),
-    bars('按严重程度', '提交人自己选的（全部）', count(items, i => lvOf(i.level)).sort((a, b) => order.findIndex(k => lvOf(k) === a[0]) - order.findIndex(k => lvOf(k) === b[0]))),
-    bars('处理结论', '已有结论的问题怎么处理的', count(items.filter(i => Pool.CLOSED.includes(i.status)), i => ST[i.status][0])),
   ].join('');
 }
 
