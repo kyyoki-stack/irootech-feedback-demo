@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>需求池 · 产品经理</title>
+<style>
+:root{
+  --bg:#eceef1;--card:#fff;--ink:#22232a;--sub:#7b7d86;--mute:#a5a7ae;--line:#e6e7eb;--faint:#f5f6f8;
+  --brand:#2e9e72;--brand-ink:#1d7550;--brand-soft:#e7f6ee;--grad:linear-gradient(100deg,#2a9d8f 0%,#5abb5c 100%);
+  --ok:#2b8a3e;--ok-soft:#ebf7ee;--warn:#c25e00;--warn-soft:#fff4e0;--bad:#d6383d;--bad-soft:#fdecec;--blue:#1c6fd1;--blue-soft:#e9f2fd;--grey-soft:#eff0f2;
+  --p0:#d6383d;--p1:#e07b16;--p2:#c9a400;--p3:#9a9ca3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+
+/* 顶栏 */
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:16px;padding:12px 24px;background:rgba(236,238,241,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top svg.logo{height:18px;width:auto;flex:none}
+.top .ttl{font-size:15px;font-weight:700;padding-left:14px;border-left:1px solid #d3d5da;white-space:nowrap}
+.tabs{display:flex;gap:4px;background:#e1e3e7;border-radius:12px;padding:3px;margin-left:12px}
+.tabs button{padding:6px 16px;border-radius:9px;font-weight:600;color:var(--sub)}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.top .r{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--sub)}
+.ghost{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--ink)}
+.ghost:hover{border-color:#cfd2d8}
+.demo-tag{font-size:11px;font-weight:700;color:var(--brand-ink);background:var(--brand-soft);border-radius:8px;padding:2px 8px}
+
+main{padding:18px 24px 40px;max-width:1440px;margin:0 auto}
+.view{display:none}.view.on{display:block}
+
+/* 指标 */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 6px 18px rgba(30,35,50,.04);text-align:left;border:1.5px solid transparent}
+button.kpi:hover{border-color:var(--line)}
+.kpi b{display:block;font-size:26px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--sub)}
+.kpi.hot b{color:var(--p0)}
+
+/* 筛选 */
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{padding:5px 14px;border-radius:9px;font-weight:600;color:var(--sub);font-size:13px}
+.seg button.on{background:var(--ink);color:#fff}
+.seg button i{font-style:normal;font-weight:500;opacity:.7;margin-left:4px}
+.sel,.search{border:1px solid var(--line);background:#fff;border-radius:12px;padding:7px 10px;font-size:13px;outline-color:var(--brand)}
+.search{width:220px;margin-left:auto}
+
+/* 列表 */
+.list{background:var(--card);border-radius:18px;box-shadow:0 6px 18px rgba(30,35,50,.04);overflow:hidden}
+.row{display:grid;grid-template-columns:92px minmax(0,1fr) 128px 150px 74px 92px;gap:14px;align-items:center;padding:13px 18px;border-top:1px solid var(--line);width:100%;text-align:left}
+.row:first-child{border-top:0}
+.row.head{font-size:12px;color:var(--sub);font-weight:600;padding:10px 18px;background:var(--faint);cursor:default}
+.row:not(.head):hover{background:#fafbfc}
+.row.sel{background:var(--brand-soft)}
+.pb{display:inline-flex;align-items:center;gap:6px}
+.p{font-size:12px;font-weight:800;color:#fff;border-radius:7px;padding:1px 7px;letter-spacing:.3px}
+.p.P0{background:var(--p0)}.p.P1{background:var(--p1)}.p.P2{background:var(--p2)}.p.P3{background:var(--p3)}
+.sc{font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums}
+.sum{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat{font-size:12px;color:var(--sub);line-height:1.4}
+.cat b{display:block;color:var(--ink);font-weight:600;font-size:13px}
+.ppl{font-size:13px;font-weight:600}
+.ppl small{display:block;font-size:11px;color:var(--sub);font-weight:400}
+.st{display:inline-block;font-size:12px;font-weight:600;border-radius:8px;padding:2px 8px;white-space:nowrap}
+.s-grey{background:var(--grey-soft);color:#5d5f66}.s-blue{background:var(--blue-soft);color:var(--blue)}
+.s-ok{background:var(--ok-soft);color:var(--ok)}.s-warn{background:var(--warn-soft);color:var(--warn)}
+.s-bad{background:var(--bad-soft);color:var(--bad)}.s-brand{background:var(--brand);color:#fff}
+.att{font-size:12px;color:var(--mute);margin-left:6px}
+.empty{padding:60px 20px;text-align:center;color:var(--sub)}
+
+/* 看板 */
+.board{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.col{background:#e3e5e9;border-radius:16px;padding:10px;min-height:300px}
+.col h3{margin:2px 4px 10px;font-size:13px;display:flex;align-items:center;gap:6px}
+.col h3 i{font-style:normal;font-weight:600;color:var(--sub);background:#fff;border-radius:8px;padding:0 7px;font-size:12px}
+.col h3 small{font-weight:400;color:var(--sub);font-size:11px;margin-left:auto}
+.kc{display:block;width:100%;text-align:left;background:#fff;border-radius:12px;padding:10px 11px;margin-bottom:8px;box-shadow:0 2px 6px rgba(30,35,50,.05);border:1.5px solid transparent}
+.kc:hover{border-color:#d3d5da}
+.kc .sum{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;margin:6px 0 4px}
+.kc .meta{margin:0}
+
+/* 统计 */
+.charts{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.chart{background:var(--card);border-radius:18px;padding:16px 18px;box-shadow:0 6px 18px rgba(30,35,50,.04)}
+.chart h3{margin:0 0 2px;font-size:14px}
+.chart p{margin:0 0 12px;font-size:12px;color:var(--sub)}
+.bar{display:grid;grid-template-columns:96px 1fr 34px;align-items:center;gap:10px;padding:4px 0;font-size:13px}
+.bar .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4d4f57}
+.bar .tr{height:14px;position:relative}
+.bar .tr i{position:absolute;left:0;top:0;bottom:0;background:var(--brand);border-radius:0 4px 4px 0;min-width:2px}
+.bar:hover .tr i{background:var(--brand-ink)}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+
+/* 详情抽屉 */
+.mask{position:fixed;inset:0;background:rgba(20,22,28,.25);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bg);z-index:21;overflow-y:auto;box-shadow:-12px 0 40px rgba(20,22,28,.12)}
+.dh{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:14px 18px;background:rgba(236,238,241,.95);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.dh .x{margin-left:auto;font-size:22px;line-height:1;color:var(--sub);width:30px;height:30px;border-radius:8px}
+.dh .x:hover{background:#e1e3e7}
+.db{padding:14px 18px 40px}
+.card{background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:12px;box-shadow:0 4px 14px rgba(30,35,50,.04)}
+.card h4{margin:0 0 8px;font-size:12px;color:var(--sub);font-weight:600;letter-spacing:.4px;display:flex;align-items:center;gap:8px}
+.card h4 .lk{margin-left:auto;font-weight:600;color:var(--brand-ink);letter-spacing:0}
+.big{font-size:17px;font-weight:700;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:12px;border-radius:8px;padding:3px 9px;background:var(--grey-soft);color:#4d4f57}
+.edit-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.prio{display:flex;align-items:center;gap:12px}
+.prio .meter{flex:1;height:8px;border-radius:4px;background:var(--grey-soft);overflow:hidden}
+.prio .meter i{display:block;height:100%;border-radius:4px}
+.reasons{margin:10px 0 0;padding-left:18px;color:#4d4f57}
+.reasons li{margin:2px 0}
+.simi{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.simi:first-of-type{border-top:0}
+.simi .pc{flex:none;font-size:12px;font-weight:700;color:var(--brand-ink);background:var(--brand-soft);border-radius:8px;padding:2px 7px}
+.simi .t{flex:1;min-width:0;font-size:13px}
+.simi .t button{color:var(--ink);text-align:left}
+.simi .t button:hover{text-decoration:underline}
+.mini{font-size:12px;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:4px 9px;background:#fff;white-space:nowrap}
+.mini:hover{border-color:var(--brand);color:var(--brand-ink)}
+.orig{white-space:pre-wrap}
+.media{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.media a,.media video{aspect-ratio:1;border-radius:10px;overflow:hidden;background:#222;display:block;width:100%}
+.media img,.media video{width:100%;height:100%;object-fit:cover;display:block}
+.media audio{grid-column:1/-1;width:100%;height:36px}
+.kv{display:grid;grid-template-columns:72px 1fr;gap:4px 10px;font-size:13px}
+.kv span{color:var(--sub)}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.act{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:7px 13px;font-weight:600;font-size:13px}
+.act:hover{border-color:#c8cbd1}
+.act.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-ink)}
+.act.main{background:var(--grad);border-color:transparent;color:#fff}
+.form{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.form label{display:block;font-size:12px;color:var(--sub);margin:8px 0 5px}
+.form textarea,.form input,.form select{width:100%;border:1px solid var(--line);background:var(--faint);border-radius:10px;padding:9px 10px;outline-color:var(--brand)}
+.form textarea{min-height:76px;resize:vertical}
+.form .hint{font-size:12px;color:var(--sub);margin-top:6px}
+.go{margin-top:12px;width:100%;background:var(--grad);color:#fff;border-radius:12px;padding:11px;font-weight:700;font-size:14px}
+.go:disabled{opacity:.6}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{position:relative;padding:0 0 12px 18px;font-size:13px}
+.tl li::before{content:"";position:absolute;left:2px;top:6px;width:8px;height:8px;border-radius:50%;background:#c9cbd1}
+.tl li::after{content:"";position:absolute;left:5.5px;top:16px;bottom:0;width:1px;background:var(--line)}
+.tl li:last-child::after{display:none}
+.tl li.pm::before{background:var(--brand)}.tl li.user::before{background:var(--blue)}
+.tl time{color:var(--sub);font-size:12px;margin-left:6px}
+.tl p{margin:2px 0 0;color:#5d5f66;white-space:pre-wrap}
+.danger{font-size:12px;color:var(--mute);text-decoration:underline;margin-top:6px}
+.danger:hover{color:var(--bad)}
+
+/* 登录 */
+.login{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.login .box{background:#fff;border-radius:22px;padding:30px 28px;width:min(380px,92vw);box-shadow:0 20px 50px rgba(30,35,50,.08);text-align:center}
+.login h2{margin:14px 0 4px;font-size:20px}
+.login p{margin:0 0 18px;color:var(--sub);font-size:13px}
+.login input{width:100%;border:1px solid var(--line);background:var(--faint);border-radius:12px;padding:12px;font-size:15px;outline-color:var(--brand);text-align:center}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(34,35,42,.94);color:#fff;padding:10px 18px;border-radius:12px;z-index:50;font-size:14px}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}.row{grid-template-columns:80px minmax(0,1fr) 110px}.row>:nth-child(4),.row>:nth-child(5),.row>:nth-child(6){display:none}.top{flex-wrap:wrap}.search{width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <svg class="logo" viewBox="0 0 258 40" role="img" aria-label="iROOTECH"><g fill="none" stroke="#111" stroke-width="7"><path d="M3.5 14V40"/><path d="M16.5 40V3.5H33a8.75 8.75 0 0 1 0 17.5H16.5M29 21L40.5 40"/><rect x="49.5" y="3.5" width="27" height="33" rx="8"/><rect x="87.5" y="3.5" width="27" height="33" rx="8"/><path d="M122 3.5H152M137 3.5V40"/><path d="M158 3.5H186M158 36.5H186"/><path d="M220 3.5H203.5a8 8 0 0 0-8 8V28.5a8 8 0 0 0 8 8H220"/><path d="M229.5 0V40M252.5 0V40M229.5 20H252.5"/></g><path d="M0 0H7V7H0Z" fill="#17a34a"/><path d="M161 16.5H183V23.5H161Z" fill="#17a34a"/></svg>
+  <span class="ttl">无人叉车需求池</span>
+  <nav class="tabs"><button data-v="pool" class="on">需求池</button><button data-v="board">看板</button><button data-v="stats">统计</button></nav>
+  <div class="r"><span id="upd"></span><button class="ghost" id="refresh">刷新</button><button class="ghost" id="logout">退出</button></div>
+</header>
+
+<main>
+  <section class="view on" id="v-pool">
+    <div class="kpis" id="kpis"></div>
+    <div class="filters">
+      <div class="seg" id="seg"></div>
+      <select class="sel" id="fCat"><option value="">全部类别</option></select>
+      <select class="sel" id="fP"><option value="">全部优先级</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select>
+      <input class="search" id="q" placeholder="搜索问题、现场、编号">
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+  <section class="view" id="v-board"><div class="board" id="board"></div></section>
+  <section class="view" id="v-stats"><div class="kpis" id="kpis2"></div><div class="charts" id="charts"></div></section>
+</main>
+
+<div class="mask" id="mask" hidden></div>
+<aside class="drawer" id="drawer" hidden></aside>
+
+<div class="login" id="login" hidden>
+  <div class="box">
+    <svg viewBox="0 0 258 40" style="height:20px"><use href="#"/></svg>
+    <h2>产品经理登录</h2>
+    <p>输入管理口令进入需求池</p>
+    <input id="tokIn" type="password" placeholder="管理口令" autocomplete="current-password">
+    <button class="go" id="tokGo">进入</button>
+  </div>
+</div>
+
+<script>window.DEMO_ADMIN = 1;</script>
+<script src="../lib/rules.js"></script>
+<script src="../lib/pool.js"></script>
+<script src="../demo-shim.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ST = {
+  received: ['新提交', 's-grey'], reviewing: ['评审中', 's-blue'], need_info: ['等提交人补充', 's-warn'], reopened: ['提交人说没解决', 's-bad'],
+  accepted: ['已接受', 's-ok'], dev: ['开发中', 's-blue'], test: ['测试中', 's-blue'], released: ['已上线·待确认', 's-brand'],
+  merged: ['已合并', 's-grey'], deferred: ['暂缓', 's-warn'], rejected: ['不做', 's-bad'], answered: ['已答复', 's-ok'], solved: ['已解决', 's-ok'],
+};
+const GROUPS = [
+  ['todo', '待处理', s => Pool.OPEN.includes(s)],
+  ['doing', '进行中', s => Pool.DOING.includes(s)],
+  ['done', '已有结论', s => Pool.CLOSED.includes(s)],
+  ['all', '全部', () => true],
+];
+const PCOL = { P0: 'var(--p0)', P1: 'var(--p1)', P2: 'var(--p2)', P3: 'var(--p3)' };
+let token = localStorage.getItem('fp_admin_token') || '';
+let items = [], group = 'todo', openId = null, picked = null;
+
+function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2400); }
+async function api(path, opt = {}) {
+  let r;
+  try { r = await fetch(path, { ...opt, headers: { 'Content-Type': 'application/json', 'x-admin-token': token } }); }
+  catch { throw new Error('连不上服务器'); }
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) { showLogin(); throw new Error('请先登录'); }
+  if (!r.ok) throw new Error(j.error || '出错了');
+  return j;
+}
+function ago(t) {
+  const m = Math.floor((Date.now() - new Date(t)) / 60000);
+  if (m < 1) return '刚刚'; if (m < 60) return m + ' 分钟前'; const h = Math.floor(m / 60);
+  if (h < 24) return h + ' 小时前'; const d = Math.floor(h / 24); return d < 30 ? d + ' 天前' : new Date(t).toLocaleDateString('zh-CN');
+}
+const fmt = t => { const d = new Date(t), p = x => String(x).padStart(2, '0'); return `${d.getMonth() + 1}月${d.getDate()}日 ${p(d.getHours())}:${p(d.getMinutes())}`; };
+const lvOf = k => Pool.LEVELS[k] ? Pool.LEVELS[k][0] + ' ' + Pool.LEVELS[k][1] : '未选';
+const stHTML = s => { const [n, c] = ST[s] || [s, 's-grey']; return `<span class="st ${c}">${n}</span>`; };
+const pHTML = it => `<span class="pb"><span class="p ${it.prio.p}">${it.prio.p}</span><span class="sc">${it.prio.score}</span></span>`;
+const attHTML = it => { const n = k => it.media.filter(m => m.kind === k).length; return [n('image') && `📷${n('image')}`, n('video') && `🎬${n('video')}`, n('audio') && `🎙${n('audio')}`].filter(Boolean).join(' '); };
+
+/* ---------- 登录 ---------- */
+function showLogin() { $('#login').hidden = false; setTimeout(() => $('#tokIn').focus(), 50); }
+$('#tokGo').onclick = async () => {
+  token = $('#tokIn').value.trim(); if (!token) return;
+  try { await api('/api/admin/check'); localStorage.setItem('fp_admin_token', token); $('#login').hidden = true; load(); }
+  catch (e) { toast(e.message === '请先登录' ? '口令不对' : e.message); }
+};
+$('#tokIn').onkeydown = e => e.key === 'Enter' && $('#tokGo').click();
+$('#logout').onclick = () => { localStorage.removeItem('fp_admin_token'); token = ''; showLogin(); };
+$('#login svg').outerHTML = $('.top svg.logo').outerHTML.replace('class="logo"', 'style="height:20px;width:auto"');
+
+/* ---------- 载入 ---------- */
+async function load() {
+  try { items = (await api('/api/admin/items')).items; } catch (e) { if (e.message !== '请先登录') toast(e.message); return; }
+  $('#upd').textContent = '更新于 ' + new Date().toTimeString().slice(0, 5);
+  const cats = [...new Set(items.map(i => i.ai?.category).filter(Boolean))];
+  const keep = $('#fCat').value;
+  $('#fCat').innerHTML = '<option value="">全部类别</option>' + cats.map(c => `<option${c === keep ? ' selected' : ''}>${esc(c)}</option>`).join('');
+  render();
+  if (openId) openDetail(openId, true);
+}
+$('#refresh').onclick = load;
+setInterval(() => { if (token && !document.hidden && !picked) load(); }, 30000);
+
+/* ---------- 指标 ---------- */
+function kpiHTML() {
+  const week = Date.now() - 7 * 86400000, live = items.filter(i => !i.mergedInto);
+  const n = f => live.filter(f).length;
+  return [
+    ['todo', '待处理', n(i => Pool.OPEN.includes(i.status)), false],
+    ['p0', 'P0 待处理', n(i => Pool.OPEN.includes(i.status) && i.prio.p === 'P0'), true],
+    ['doing', '进行中', n(i => Pool.DOING.includes(i.status)), false],
+    ['confirm', '等提交人确认', n(i => i.status === 'released'), false],
+    ['week', '近 7 天新提交', items.filter(i => new Date(i.createdAt) > week).length, false],
+  ].map(([k, t, v, hot]) => `<button class="kpi${hot && v ? ' hot' : ''}" data-k="${k}"><b>${v}</b><span>${t}</span></button>`).join('');
+}
+
+/* ---------- 需求池列表 ---------- */
+function render() {
+  $('#kpis').innerHTML = kpiHTML(); $('#kpis2').innerHTML = kpiHTML();
+  $('#seg').innerHTML = GROUPS.map(([k, t, f]) => `<button data-g="${k}" class="${k === group ? 'on' : ''}">${t}<i>${items.filter(i => f(i.status) && (!i.mergedInto || k === 'all' || k === 'done')).length}</i></button>`).join('');
+  const f = GROUPS.find(g => g[0] === group)[2], cat = $('#fCat').value, pp = $('#fP').value, q = $('#q').value.trim().toLowerCase();
+  let list = items.filter(i => f(i.status) && (!i.mergedInto || group === 'all' || group === 'done') && (!cat || i.ai?.category === cat) && (!pp || i.prio.p === pp)
+    && (!q || [i.ai?.summary, i.text, i.site, i.role, '#' + i.id].join(' ').toLowerCase().includes(q)));
+  list.sort(group === 'todo' ? (a, b) => b.prio.score - a.prio.score || b.id - a.id : (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  $('#list').innerHTML = `<div class="row head"><span>AI 优先级</span><span>问题</span><span>状态</span><span>类别 / 模块</span><span>提过的人</span><span>更新</span></div>`
+    + (list.length ? list.map(i => `<button class="row${i.id === openId ? ' sel' : ''}" data-id="${i.id}">
+      <span>${pHTML(i)}</span>
+      <span style="min-width:0"><div class="sum">${esc(i.ai?.summary || i.text)}</div>
+        <div class="meta">#${i.id} · ${esc(i.site || '未填现场')} · ${esc(i.role)} · ${lvOf(i.level)}<span class="att">${attHTML(i)}</span>${i.mergedInto ? ` · 已合并到 #${i.mergedInto}` : ''}</div></span>
+      <span>${stHTML(i.status)}</span>
+      <span class="cat"><b>${esc(i.ai?.category)}</b>${esc(i.ai?.module)}</span>
+      <span class="ppl">${i.prio.people} 人${i.children.length ? `<small>含合并 ${i.children.length} 条</small>` : ''}</span>
+      <span class="sc">${ago(i.updatedAt)}</span></button>`).join('')
+      : `<div class="empty">${group === 'todo' ? '没有待处理的问题 🎉' : '没有符合条件的问题'}</div>`);
+  renderBoard(); renderStats();
+}
+$('#seg').onclick = e => { const b = e.target.closest('button'); if (b) { group = b.dataset.g; render(); } };
+['fCat', 'fP'].forEach(id => $('#' + id).onchange = render);
+$('#q').oninput = render;
+document.addEventListener('click', e => {
+  const k = e.target.closest('.kpi'); if (k) {
+    const g = { todo: 'todo', doing: 'doing', confirm: 'doing', week: 'all', p0: 'todo' }[k.dataset.k];
+    group = g; $('#fP').value = k.dataset.k === 'p0' ? 'P0' : ''; switchView('pool'); render(); return;
+  }
+  const r = e.target.closest('[data-id]'); if (r) openDetail(+r.dataset.id);
+});
+
+/* ---------- 看板 ---------- */
+function renderBoard() {
+  const cols = [
+    ['待评审', '等你决定做不做', i => Pool.OPEN.includes(i.status)],
+    ['已接受', '定了版本', i => i.status === 'accepted'],
+    ['开发中', '', i => i.status === 'dev'],
+    ['测试中', '', i => i.status === 'test'],
+    ['已上线', '等提交人确认', i => i.status === 'released'],
+    ['已解决', '提交人确认过', i => i.status === 'solved'],
+  ];
+  const live = items.filter(i => !i.mergedInto);
+  $('#board').innerHTML = cols.map(([t, sub, f]) => { const l = live.filter(f).sort((a, b) => b.prio.score - a.prio.score);
+    return `<div class="col"><h3>${t}<i>${l.length}</i><small>${sub}</small></h3>${l.map(i => `<button class="kc" data-id="${i.id}">
+      ${pHTML(i)} ${i.status === 'reopened' ? stHTML('reopened') : i.status === 'need_info' ? stHTML('need_info') : ''}
+      <div class="sum">${esc(i.ai?.summary || i.text)}</div>
+      <div class="meta">#${i.id} · ${esc(i.site || i.role)}${i.version ? ' · ' + esc(i.version) : ''}${i.prio.people > 1 ? ` · ${i.prio.people} 人提过` : ''}</div></button>`).join('')}</div>`; }).join('');
+}
+
+/* ---------- 统计 ---------- */
+function bars(title, sub, rows) {
+  const max = Math.max(1, ...rows.map(r => r[1]));
+  return `<div class="chart"><h3>${title}</h3><p>${sub}</p>${rows.length ? rows.map(([k, v]) =>
+    `<div class="bar" title="${esc(k)}：${v} 条"><span class="lb">${esc(k)}</span><span class="tr"><i style="width:${v / max * 100}%"></i></span><span class="v">${v}</span></div>`).join('')
+    : '<p>暂无数据</p>'}</div>`;
+}
+function count(list, key) { const m = {}; list.forEach(i => { const k = key(i) || '未填'; m[k] = (m[k] || 0) + 1; }); return Object.entries(m).sort((a, b) => b[1] - a[1]); }
+function renderStats() {
+  const open = items.filter(i => !i.mergedInto && !Pool.CLOSED.includes(i.status));
+  const order = ['stop', 'heavy', 'some', 'minor', 'idea', ''];
+  $('#charts').innerHTML = [
+    bars('按问题类别', '所有未关闭的问题（不含已合并）', count(open, i => i.ai?.category)),
+    bars('按模块', '问题集中在哪个模块', count(open, i => i.ai?.module)),
+    bars('按现场', '哪个现场问题最多', count(open, i => (i.site || '').replace(/\s+/g, '')).slice(0, 8)),
+    bars('按提交人角色', '谁在提问题（全部）', count(items, i => i.role)),
+    bars('按严重程度', '提交人自己选的（全部）', count(items, i => lvOf(i.level)).sort((a, b) => order.findIndex(k => lvOf(k) === a[0]) - order.findIndex(k => lvOf(k) === b[0]))),
+    bars('处理结论', '已有结论的问题怎么处理的', count(items.filter(i => Pool.CLOSED.includes(i.status)), i => ST[i.status][0])),
+  ].join('');
+}
+
+/* ---------- 切换视图 ---------- */
+function switchView(v) { document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v)); document.querySelectorAll('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v)); }
+$('.tabs').onclick = e => { const b = e.target.closest('button'); if (b) switchView(b.dataset.v); };
+
+/* ---------- 详情 + 处理 ---------- */
+function actionsFor(it) {
+  if (it.mergedInto) return [];
+  if (Pool.OPEN.includes(it.status)) return [...(it.status === 'received' ? ['review'] : []), 'accept', 'merge', 'defer', 'reject', 'need_info', 'answer'];
+  return { accepted: ['dev'], dev: ['test'], test: ['release'], released: [] }[it.status] || ['review'];
+}
+const MAIN = { accept: 1, dev: 1, test: 1, release: 1 };
+function closeDetail() { openId = null; picked = null; $('#drawer').hidden = $('#mask').hidden = true; render(); }
+$('#mask').onclick = closeDetail;
+document.addEventListener('keydown', e => e.key === 'Escape' && closeDetail());
+
+function openDetail(id, keep) {
+  const it = items.find(i => i.id === id); if (!it) return closeDetail();
+  if (!keep || openId !== id) picked = null;
+  openId = id; $('#drawer').hidden = $('#mask').hidden = false;
+  document.querySelectorAll('.row').forEach(r => r.classList.toggle('sel', +r.dataset.id === id));
+  const p = it.prio, acts = actionsFor(it);
+  const media = it.media.map(m => m.kind === 'image' ? `<a href="${m.url}" target="_blank"><img src="${m.url}" loading="lazy"></a>`
+    : m.kind === 'video' ? `<video src="${m.url}#t=0.1" controls playsinline preload="metadata"></video>` : `<audio src="${m.url}" controls preload="none"></audio>`).join('');
+  const kids = it.children.map(k => items.find(i => i.id === k)).filter(Boolean);
+  const mergeOpts = items.filter(o => o.id !== it.id && !o.mergedInto && !['rejected'].includes(o.status))
+    .sort((a, b) => (it.similar.find(s => s.id === b.id)?.score || 0) - (it.similar.find(s => s.id === a.id)?.score || 0) || b.id - a.id);
+  $('#drawer').innerHTML = `
+    <div class="dh"><b>#${it.id}</b>${stHTML(it.status)}${pHTML(it)}<button class="x" id="dx" title="关闭">×</button></div>
+    <div class="db">
+      <div class="card">
+        <div class="big">${esc(it.ai?.summary || it.text)}</div>
+        <div class="chips"><span class="chip">${lvOf(it.level)}</span><span class="chip">类别：${esc(it.ai?.category)}</span><span class="chip">模块：${esc(it.ai?.module)}</span>${it.version ? `<span class="chip">版本：${esc(it.version)}</span>` : ''}${it.ai?.by === 'user' ? '<span class="chip">提交人改写过描述</span>' : ''}</div>
+        <div id="editBox" hidden><div class="edit-row">
+          <select class="sel" id="eCat">${[...Rules.CATS, '待归类'].map(c => `<option${c === it.ai?.category ? ' selected' : ''}>${c}</option>`).join('')}</select>
+          <select class="sel" id="eMod">${[...Rules.MODS, '待判断'].map(c => `<option${c === it.ai?.module ? ' selected' : ''}>${c}</option>`).join('')}</select>
+          <select class="sel" id="eLv">${Object.keys(Pool.LEVELS).map(k => `<option value="${k}"${k === it.level ? ' selected' : ''}>${lvOf(k)}</option>`).join('')}</select></div>
+          <button class="go" id="eSave" style="margin-top:8px;padding:8px">保存分类</button></div>
+        <div style="margin-top:8px"><button class="danger" id="eOpen" style="text-decoration:none;color:var(--brand-ink);font-weight:600">AI 分得不对？改一下</button></div>
+      </div>
+
+      <div class="card"><h4>AI 优先级</h4>
+        <div class="prio"><span class="p ${p.p}" style="font-size:14px;padding:2px 9px">${p.p}</span><div class="meter"><i style="width:${p.score}%;background:${PCOL[p.p]}"></i></div><b style="font-variant-numeric:tabular-nums">${p.score} 分</b></div>
+        <ul class="reasons">${p.reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>
+      </div>
+
+      ${it.similar.length ? `<div class="card"><h4>可能是同一个问题</h4>${it.similar.map(s => `<div class="simi"><span class="pc">${s.score}% 像</span>
+        <div class="t"><button data-id="${s.id}">#${s.id} ${esc(s.summary)}</button></div>${acts.includes('merge') ? `<button class="mini" data-merge="${s.id}">合并到 #${s.id}</button>` : ''}</div>`).join('')}</div>` : ''}
+      ${kids.length ? `<div class="card"><h4>合并进来的问题（${kids.length}）</h4>${kids.map(k => `<div class="simi"><div class="t"><button data-id="${k.id}">#${k.id} ${esc(k.ai?.summary || k.text)}</button></div><span class="sc">${esc(k.site || k.role)}</span></div>`).join('')}
+        <p class="hint" style="font-size:12px;color:var(--sub);margin:6px 0 0">这些问题会跟着本条一起推进，提交人都能看到进度。</p></div>` : ''}
+
+      <div class="card"><h4>${it.mergedInto ? `已合并到 <button data-id="${it.mergedInto}" style="color:var(--brand-ink);font-weight:700">#${it.mergedInto}</button>，在那条上处理` : '处理'}</h4>
+        ${acts.length ? `<div class="acts">${acts.map(a => `<button class="act${MAIN[a] ? ' main' : ''}${picked === a ? ' on' : ''}" data-act="${a}">${Pool.ACTIONS[a].label}</button>`).join('')}</div>`
+          : `<p style="margin:0;color:var(--sub);font-size:13px">${it.status === 'released' ? '已上线，等提交人在手机上确认"解决了"或"还没解决"。' : '无需操作。'}</p>`}
+        <div id="actForm"></div>
+      </div>
+
+      <div class="card"><h4>提交人原话</h4><div class="orig">${esc(it.text) || '<span style="color:var(--sub)">（没有文字）</span>'}</div>${media ? `<div class="media">${media}</div>` : ''}</div>
+      <div class="card"><h4>提交人</h4><div class="kv"><span>角色</span><b>${esc(it.role)}</b><span>现场</span><b>${esc(it.site || '未填')}</b><span>称呼</span><b>${esc(it.name || '未填')}</b><span>提交时间</span><b>${fmt(it.createdAt)}</b></div></div>
+      <div class="card"><h4>处理记录</h4><ul class="tl">${it.history.slice().reverse().map(h => `<li class="${h.by}"><b>${(ST[h.status] || [h.status])[0]}</b><time>${fmt(h.t)} · ${{ pm: '产品经理', user: '提交人', system: '系统', auto: '演示自动' }[h.by] || h.by}</time>${h.note ? `<p>${esc(h.note)}</p>` : ''}</li>`).join('')}</ul></div>
+      <button class="danger" id="del">删除这条（只用于清理测试数据）</button>
+    </div>`;
+  $('#dx').onclick = closeDetail;
+  $('#eOpen').onclick = () => { $('#editBox').hidden = false; $('#eOpen').hidden = true; };
+  $('#eSave').onclick = () => act(it, 'edit', { category: $('#eCat').value, module: $('#eMod').value, level: $('#eLv').value });
+  $('#del').onclick = async () => { if (!confirm(`确定删除 #${it.id}？提交人那边也会看不到这条。`)) return;
+    try { await api('/api/admin/feedback/' + it.id, { method: 'DELETE' }); toast('已删除'); closeDetail(); load(); } catch (e) { toast(e.message); } };
+  $('#drawer').querySelectorAll('[data-act]').forEach(b => b.onclick = () => { picked = b.dataset.act; openDetail(id, true); });
+  $('#drawer').querySelectorAll('[data-merge]').forEach(b => b.onclick = () => { picked = 'merge'; openDetail(id, true); $('#mTo').value = b.dataset.merge; $('#mTo').onchange(); });
+  if (picked) {
+    const A = Pool.ACTIONS[picked], needV = picked === 'accept' || picked === 'release';
+    $('#actForm').innerHTML = `<div class="form">
+      ${picked === 'merge' ? `<label>合并到哪一条</label><select id="mTo">${mergeOpts.map(o => `<option value="${o.id}">#${o.id} ${esc((o.ai?.summary || o.text).slice(0, 36))}${it.similar.find(s => s.id === o.id) ? `（${it.similar.find(s => s.id === o.id).score}% 像）` : ''}</option>`).join('')}</select>` : ''}
+      ${needV ? `<label>版本</label><input id="fVer" value="${esc(it.version || '')}" placeholder="比如 V1.4">` : ''}
+      <label>给提交人的回复${A.need ? '（必填）' : ''}</label>
+      <textarea id="fReply"></textarea>
+      <div class="hint">AI 已起草，可以直接用，也可以改。提交人会在手机上看到这句话。</div>
+      <button class="go" id="fGo">确认${A.label}</button></div>`;
+    const draft = () => Pool.draft(picked, it, { version: $('#fVer')?.value, mergeInto: $('#mTo')?.value });
+    $('#fReply').value = draft();
+    if ($('#mTo')) $('#mTo').onchange = () => $('#fReply').value = draft();
+    if ($('#fVer')) $('#fVer').oninput = () => $('#fReply').value = draft();
+    $('#fGo').onclick = () => act(it, picked, { reply: $('#fReply').value, version: $('#fVer')?.value, mergeInto: $('#mTo')?.value });
+  }
+}
+async function act(it, action, body) {
+  const btn = $('#fGo') || $('#eSave'); if (btn) btn.disabled = true;
+  try {
+    await api('/api/admin/feedback/' + it.id, { method: 'POST', body: JSON.stringify({ action, ...body }) });
+    toast(action === 'edit' ? '分类已更新' : `已${Pool.ACTIONS[action].label}，提交人能在手机上看到`);
+    picked = null; await load();
+  } catch (e) { toast(e.message); if (btn) btn.disabled = false; }
+}
+
+/* ---------- 启动 ---------- */
+if (window.DEMO_ADMIN) { token = 'demo'; document.querySelector('.ttl').insertAdjacentHTML('afterend', '<span class="demo-tag">演示版</span>'); $('#logout').hidden = true; }
+token ? load() : showLogin();
+</script>
+</body>
+</html>
