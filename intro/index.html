@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>无人叉车需求池 · 作业说明</title>
+<style>
+body{margin:0;background:#eceef1;font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#22232a}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 48px}
+.hero{background:#fff;border-radius:22px;padding:24px 26px;margin-bottom:14px;box-shadow:0 8px 24px rgba(30,35,50,.05)}
+.logo{height:20px;display:block;margin-bottom:14px}
+h1{font-size:23px;margin:0 0 6px}
+.sub{color:#7b7d86;margin:0}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.lk{display:block;text-decoration:none;color:inherit;border-radius:16px;padding:14px 16px;background:#f5f6f8;border:1.5px solid #e6e7eb}
+.lk:hover{border-color:#2e9e72}
+.lk b{display:block;font-size:15px}
+.lk span{display:block;font-size:12px;color:#7b7d86;margin:2px 0 6px}
+.lk code{font-size:12px;color:#1d7550;word-break:break-all}
+.lk.main{background:#e7f6ee;border-color:#bfe3cf}
+.card{background:#fff;border-radius:20px;padding:20px 24px;margin-bottom:14px;box-shadow:0 8px 24px rgba(30,35,50,.04)}
+h2{font-size:17px;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2 i{font-style:normal;width:26px;height:26px;border-radius:50%;background:linear-gradient(100deg,#2a9d8f,#5abb5c);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+p{margin:6px 0}
+ol,ul{margin:6px 0;padding-left:22px}
+li{margin:4px 0}
+b.g{color:#1d7550}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+td{padding:9px 8px;border-top:1px solid #eef0f2;vertical-align:top}
+td:first-child{white-space:nowrap;font-weight:700;width:110px}
+.tip{background:#f5f6f8;border-radius:12px;padding:10px 14px;font-size:13px;color:#5d5f66;margin-top:10px}
+.foot{text-align:center;color:#a5a7ae;font-size:12px;margin-top:20px}
+@media (max-width:560px){.links{grid-template-columns:1fr}td:first-child{width:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <svg class="logo" viewBox="0 0 258 40" role="img" aria-label="iROOTECH"><g fill="none" stroke="#111" stroke-width="7"><path d="M3.5 14V40"/><path d="M16.5 40V3.5H33a8.75 8.75 0 0 1 0 17.5H16.5M29 21L40.5 40"/><rect x="49.5" y="3.5" width="27" height="33" rx="8"/><rect x="87.5" y="3.5" width="27" height="33" rx="8"/><path d="M122 3.5H152M137 3.5V40"/><path d="M158 3.5H186M158 36.5H186"/><path d="M220 3.5H203.5a8 8 0 0 0-8 8V28.5a8 8 0 0 0 8 8H220"/><path d="M229.5 0V40M252.5 0V40M229.5 20H252.5"/></g><path d="M0 0H7V7H0Z" fill="#17a34a"/><path d="M161 16.5H183V23.5H161Z" fill="#17a34a"/></svg>
+    <h1>无人叉车需求池 · 作业说明</h1>
+    <p class="sub">二面作业：用 AI 工具做一个需求池，让一线人员方便地提需求，产品经理能分类、排优先级、跟进到闭环。</p>
+    <div class="links">
+      <a class="lk main" href="https://kyyoki-stack.github.io/irootech-feedback-demo/admin/" target="_blank"><b>产品经理端 · 需求池</b><span>建议用电脑打开</span><code>kyyoki-stack.github.io/irootech-feedback-demo/admin/</code></a>
+      <a class="lk" href="https://kyyoki-stack.github.io/irootech-feedback-demo/" target="_blank"><b>手机端 · 提问题</b><span>建议用手机微信打开</span><code>kyyoki-stack.github.io/irootech-feedback-demo/</code></a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><i>1</i>3 分钟体验</h2>
+    <ol>
+      <li>用电脑打开<b>产品经理端</b>，默认进入「AI 痛点」页：AI 已把需求池里的反馈归纳成痛点，标出<b class="g">这周重点解决的 3 个</b>。</li>
+      <li>点任一张痛点卡片的「查看这 N 条」，看原始反馈；点某一条，可以接受、合并、暂缓、不做、打回补充，回复会同步给提交人。</li>
+      <li>用手机打开<b>手机端</b>，选身份 → 选现在情况 → 说一句或拍张照提交，在「我的问题」里能看到处理进度。</li>
+    </ol>
+    <div class="tip">这是演示版：没有服务器，数据保存在打开它的浏览器里，已预置一批叉车现场的示例反馈。在同一个浏览器里先用手机端提交，再打开产品经理端，就能看到它进入需求池。</div>
+  </div>
+
+  <div class="card">
+    <h2><i>2</i>产品经理端：四个页面</h2>
+    <table>
+      <tr><td>✨ AI 痛点</td><td>每周打开先看这里。AI 把所有未关闭的反馈归纳成痛点卡片，每张写清：几条、几个人、几个现场、严重程度、代表原话、<b class="g">为什么是重点</b>、建议怎么做。重点只留 3 个，其余标为"先观察"或"暂不做"并写明原因。卡片可一键把同类反馈合并成一个需求并排期。</td></tr>
+      <tr><td>需求池</td><td>逐条处理。按 AI 优先级（P0–P3）排序，每条写明打分理由；自动识别"可能是同一个问题"并一键合并；六种处理结论，AI 起草回复，"暂缓""不做"必须写原因。</td></tr>
+      <tr><td>看板</td><td>已接受的需求在开发、测试、上线、待提交人确认各阶段的分布。</td></tr>
+      <tr><td>统计</td><td>需求池运转是否健康：本周新增、平均首次响应时长、平均解决周期、上线后"没解决"的比例、积压，以及处理流转、现场×严重程度热力图。</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><i>3</i>设计上的三个取舍</h2>
+    <ul>
+      <li><b>提的人零门槛</b>：一线人员不选分类、不填长表单，说一句、拍一张就能提；分类和优先级交给 AI 和产品经理。</li>
+      <li><b>优先级挂在交付成本上</b>：排序依次是 安全 &gt; 卡交付 &gt; 已停线 &gt; 多人多现场反复出现。"新现场部署慢"这类问题权重高，因为它直接决定单台交付人天。</li>
+      <li><b>必须闭环</b>：每条反馈都有结论和原因，回到提交人手机上；上线后由提交人确认"解决了"才算关闭，"没解决"会重新打开。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><i>4</i>怎么做的、下一步</h2>
+    <ul>
+      <li>全程使用 AI 编程工具（Claude Code）完成需求拆解、界面和前后端开发、测试。</li>
+      <li>已有正式版：数据库存储、照片 / 视频 / 录音真实上传、管理口令登录，目前在本机运行；部署到服务器后，任何人点链接即可提交，所有反馈汇总到产品经理端。</li>
+      <li>当前的 AI 分类和痛点归纳是规则版（关键词 + 文字相似度）；接入大模型后，语音转文字、归纳和理由会更准确。</li>
+      <li>后续可接企业微信：新反馈和每周痛点汇总自动推送给相关人。</li>
+    </ul>
+  </div>
+
+  <p class="foot">无人叉车需求池 · 作业演示</p>
+</div>
+</body>
+</html>
